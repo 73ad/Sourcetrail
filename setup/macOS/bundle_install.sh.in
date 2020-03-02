@@ -172,8 +172,39 @@ do
 	# spctl -a --verbose $FRAMEWORK_BIN_PATH
 done
 
+echo -e $INFO "Codesign Python binaries."
+for LIB_PATH in $(find $RES_DIR -name '*.dylib')
+do
+	echo "python lib" $LIB_PATH
+	codesign --force --sign "Developer ID Application: Coati Software KG" $LIB_PATH
+	codesign -v --verbose=5 $LIB_PATH
+done
+for LIB_PATH in $(find $RES_DIR -name '*.so')
+do
+	echo "python lib" $LIB_PATH
+	codesign --force --sign "Developer ID Application: Coati Software KG" $LIB_PATH
+	codesign -v --verbose=5 $LIB_PATH
+done
+for LIB_PATH in $(find $RES_DIR -name 'Python')
+do
+	echo "python bin" $LIB_PATH
+	codesign --force --sign "Developer ID Application: Coati Software KG" $LIB_PATH
+	codesign -v --verbose=5 $LIB_PATH
+done
+for LIB_PATH in $(find $RES_DIR -name 'SourcetrailPythonIndexer')
+do
+	echo "python bin" $LIB_PATH
+	codesign --force --options runtime --sign "Developer ID Application: Coati Software KG" $LIB_PATH
+	codesign -v --verbose=5 $LIB_PATH
+done
+
+echo -e $INFO "Codesign indexer."
+codesign --force --options runtime --sign "Developer ID Application: Coati Software KG" $INDEXER_PATH
+codesign -v  --deep --verbose=5 $INDEXER_PATH
+# spctl -a --verbose $INDEXER_PATH
+
 echo -e $INFO "Codesign app."
-codesign --force --sign "Developer ID Application: Coati Software KG" $BUNDLE_PATH
+codesign --force --options runtime --sign "Developer ID Application: Coati Software KG" $BUNDLE_PATH
 codesign -v  --deep --verbose=5 $BUNDLE_PATH
 # spctl -a --verbose $BUNDLE_PATH
 
